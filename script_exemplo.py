@@ -14,7 +14,8 @@ Dependências:
 """
 
 import argparse
-
+import json
+import os
 import numpy as np
 
 
@@ -33,14 +34,30 @@ def calculate_average(numbers):
     print(f"Média = {average}")
     return average
 
-def save_result(average, qtd_numeros):
-    with open("resultado.txt", "w") as f:
-        f.write(f"qtd_numeros: {qtd_numeros}\n")
-        f.write(f"media: {average}\n")
-    print("Resultado salvo em resultado.txt")
+def read_results():
+    if not os.path.exists("resultado.json"):
+        return []
+    with open("resultado.json", "r", encoding="utf-8") as f:
+        resultados = json.load(f)
+        if not isinstance(resultados, list):
+            resultados = [resultados]
+        return resultados
+
+def save_result(results, numbers, average, qtd_numeros):
+    resultado = {
+        "qtd_numeros": qtd_numeros,
+        "numeros": numbers,
+        "media": average
+    }
+    results.append(resultado)
+    with open("resultado.json", "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=4)
+
+
 
 if __name__ == "__main__":
     args = parse_args()
     numbers = generate_numbers(args.qtd_numeros)
     average = calculate_average(numbers)
-    save_result(average, args.qtd_numeros)
+    results = read_results()
+    save_result(results, numbers, average, args.qtd_numeros)
