@@ -1,10 +1,13 @@
 [project]
-name = "escience-noworkflow-study"
+name = "demo"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "noworkflow[all]>=2.0.1",
+    "noworkflow[all]",
     "setuptools<70",
 ]
+
+[tool.uv.sources]
+noworkflow = { git = "https://github.com/gems-uff/noworkflow.git" }
